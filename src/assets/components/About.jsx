@@ -47,7 +47,7 @@ const About = () => {
               
               <div className="space-y-4">
                 <p>
-                  I'm a <span className="text-[#cca43b] font-medium font-serif">Full Stack Developer</span> with over 5 years of experience building modern web applications from the ground up. I specialize in React, Node.js, and cloud architecture, with a strong passion for creating intuitive user interfaces backed by robust, well-structured APIs.
+                  I'm a <span className="text-[#cca43b] font-medium font-serif">Full Stack Developer</span> with over 1 years of experience building modern web applications from the ground up. I specialize in React, Node.js, and cloud architecture, with a strong passion for creating intuitive user interfaces backed by robust, well-structured APIs.
                 </p>
               </div>
               

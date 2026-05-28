@@ -1,6 +1,6 @@
 import React from 'react';
 import gtoImage from '../gto.jpg'; // Ensure this path is correct based on your project structure
-
+import ppaImage from '../ppa.jpeg';
 const Content = () => {
     return (
         <section className=" min-h-screen  text-white flex items-center justify-center px-6  relative overflow-hidden" id="content">
@@ -23,7 +23,7 @@ const Content = () => {
                             <div className="w-full h-full rounded-full p-[2px] bg-[#0d070e]">
                                 {/* Image */}
                                 <img
-                                    src={gtoImage}
+                                    src={ppaImage}
                                     alt="Arcturus Devlin Profile"
                                     className="w-full h-full object-cover rounded-full filter contrast-[1.05] brightness-[0.95]"
                                 />

@@ -41,7 +41,7 @@ const Projects = () => {
       {/* Section Title Header */}
       <div className="w-full max-w-5xl flex flex-col items-center mb-16 z-10">
         <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-[#cca43b] font-bold tracking-widest uppercase drop-shadow-[0_2px_5px_rgba(0,0,0,0.9)]">
-          MY QUEST LOG
+          MY PROJECTS
         </h2>
         
         {/* RPG Style Line with Center Diamond */}
