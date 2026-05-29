@@ -13,9 +13,9 @@ const Navbar = ({ activeTheme, onThemeChange }) => {
   ];
 
   const themes = [
-    { id: 'wizard', name: '✨ Wizard Magic' },
+   { id: 'leaf', name: '🍁 Momiji Leaves' },
     { id: 'snow', name: '❄️ Snow Falling' },
-    { id: 'rain', name: '🌧️ Gold Rain' }
+    { id: 'rain', name: '🌧️ Raining' }
   ];
 
   return (

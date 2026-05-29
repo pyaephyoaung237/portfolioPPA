@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import mangaTai from '../mangaTai.png';
 
 const Projects = () => {
   // Modal State
@@ -15,7 +16,7 @@ const Projects = () => {
       description: 'A comprehensive manga platform featuring user and admin panel hubs, optimized for responsive reading and a secure internal database system.',
       stars: 5,
       tags: ['Laravel', 'MySQL', 'Tailwind CSS', 'Admin User Panel'],
-      image: 'https://via.placeholder.com/600x400/130b14/cca43b?text=MangaTai+Preview', 
+      image: mangaTai, 
       longDescription: 'MangaTai is a high-performance manga reader platform complete with an advanced ecosystem. It features a dedicated User Panel for tracking reading history, bookmarks, and account details alongside a powerful Admin Panel managing file uploads, categories, payment verification paths, and access permissions.',
     },
     {

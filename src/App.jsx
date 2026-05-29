@@ -9,20 +9,23 @@ import Projects from './assets/components/Projects'
 import Contact from './assets/components/Contact'
 import Footer from './assets/components/Footer'
 
+// Import your custom leaf asset file directly!
+import momijiImg from './assets/momiji.png' 
+
 function App() {
-  // Global state for background style controller ('wizard', 'snow', or 'rain')
-  const [effectTheme, setEffectTheme] = useState('wizard')
+  const [effectTheme, setEffectTheme] = useState('leaf')
   const canvasRef = useRef(null)
 
   useEffect(() => {
-    // If the active theme is wizard, canvas updates are not required
-    if (effectTheme === 'wizard') return
-
     const canvas = canvasRef.current
     if (!canvas) return
     
     const ctx = canvas.getContext('2d')
     let animationFrameId
+
+    // Load the imported image asset into a Canvas HTML Image object element
+    const leafImg = new Image()
+    leafImg.src = momijiImg
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -31,9 +34,8 @@ function App() {
     resizeCanvas()
     window.addEventListener('resize', resizeCanvas)
 
-    // Setup array values based on the active chosen theme mode
     const particles = []
-    const numParticles = effectTheme === 'rain' ? 120 : 75
+    let numParticles = effectTheme === 'rain' ? 120 : (effectTheme === 'leaf' ? 20 : 75)
 
     for (let i = 0; i < numParticles; i++) {
       if (effectTheme === 'snow') {
@@ -52,39 +54,63 @@ function App() {
           speed: Math.random() * 12 + 8,
           opacity: Math.random() * 0.25 + 0.05
         })
+      } else if (effectTheme === 'leaf') {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 16 + 14, // Scale size bounds nicely for the image aspect ratio
+          speedY: Math.random() * 1.2 + 0.7,
+          speedX: Math.random() * 1 - 0.5,
+          angle: Math.random() * Math.PI * 2,
+          spinSpeed: Math.random() * 0.02 - 0.01,
+          opacity: Math.random() * 0.5 + 0.5
+        })
       }
     }
 
-    // Canvas Frame Processing
     const renderLoop = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       for (let i = 0; i < numParticles; i++) {
         const p = particles[i]
 
-        ctx.beginPath()
-
         if (effectTheme === 'snow') {
+          ctx.beginPath()
           ctx.fillStyle = `rgba(204, 164, 59, ${p.opacity})`
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, true)
           ctx.fill()
-
           p.y += p.speed
           p.x += Math.sin(p.y / 30) * 0.5
         } else if (effectTheme === 'rain') {
+          ctx.beginPath()
           ctx.strokeStyle = `rgba(204, 164, 59, ${p.opacity})`
           ctx.lineWidth = 1.5
           ctx.moveTo(p.x, p.y)
           ctx.lineTo(p.x, p.y + p.length)
           ctx.stroke()
-
           p.y += p.speed
+        } else if (effectTheme === 'leaf') {
+          // --- DRAW THE CUSTOM IMAGE LEAF ---
+          ctx.save()
+          ctx.translate(p.x, p.y)
+          ctx.rotate(p.angle)
+          ctx.globalAlpha = p.opacity // Gives them varying depth opacities
+
+          // Draws the image centered on its physics coordinate point
+          ctx.drawImage(leafImg, -p.size / 2, -p.size / 2, p.size, p.size)
+          ctx.restore()
+
+          // Leaf float equations mechanics
+          p.y += p.speedY
+          p.x += p.speedX + Math.sin(p.y / 50) * 0.5
+          p.angle += p.spinSpeed
         }
 
-        // Loop bounds checks
-        if (p.y > canvas.height) {
-          p.y = -20
+        // Out of bounds track loop reset
+        if (p.y > canvas.height + 30) {
+          p.y = -30
           p.x = Math.random() * canvas.width
+          if (effectTheme === 'leaf') p.angle = Math.random() * Math.PI * 2
         }
       }
       animationFrameId = requestAnimationFrame(renderLoop)
@@ -101,31 +127,8 @@ function App() {
   return (
     <div className="bg-[#0d070e] min-h-screen text-white relative overflow-x-hidden selection:bg-[#cca43b]/30">
       
-      {/* 🪄 WIZARD STYLE LAYER (Rendered conditionally via theme check) */}
-      {effectTheme === 'wizard' && (
-        <>
-          <style>{`
-            @keyframes wizardGlow {
-              0% { transform: translate(-20%, -10%) scale(1); opacity: 0.15; }
-              50% { transform: translate(30%, 50%) scale(1.4); opacity: 0.32; }
-              100% { transform: translate(-10%, 110%) scale(1.1); opacity: 0.15; }
-            }
-            .animate-wizard-magic { animation: wizardGlow 14s ease-in-out infinite alternate; }
-            .animate-wizard-magic-delayed { animation: wizardGlow 18s ease-in-out infinite alternate-reverse; animation-delay: 4s; }
-          `}</style>
-          <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] rounded-full bg-[#cca43b]/15 blur-[130px] animate-wizard-magic"></div>
-            <div className="absolute top-1/4 right-1/4 w-[450px] h-[450px] rounded-full bg-purple-600/15 blur-[130px] animate-wizard-magic-delayed"></div>
-          </div>
-        </>
-      )}
+      <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />
 
-      {/* ❄️ / 🌧️ CANVAS LAYERS */}
-      {effectTheme !== 'wizard' && (
-        <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-0" />
-      )}
-
-      {/* Passing theme parameters to control active tags in Navbar toggle panels */}
       <NaNavbar activeTheme={effectTheme} onThemeChange={setEffectTheme} />
       
       <main className="relative z-10 pt-20">
