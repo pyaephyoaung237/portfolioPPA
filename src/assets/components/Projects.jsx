@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import mangaTai from '../mangaTai.png';
+import mangaTai1 from '../mangaTai1.jpg';
+import mangaTai2 from '../mangaTai2.jpg';
+import guitarHub from '../guitarHub.jpg';
+import mangaTai3 from '../mangaTai3.jpg';
+import mangaTai4 from '../mangaTai4.png';
+import mangaTai5 from '../mangaTai5.png';
 
 const Projects = () => {
   // Modal State
   const [activeProject, setActiveProject] = useState(null);
+  // Image Slider State
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
-  // Your two specific projects with RPG-style details
   const projectsData = [
     {
       id: 1,
@@ -16,7 +23,14 @@ const Projects = () => {
       description: 'A comprehensive manga platform featuring user and admin panel hubs, optimized for responsive reading and a secure internal database system.',
       stars: 5,
       tags: ['Laravel', 'MySQL', 'Tailwind CSS', 'Admin User Panel'],
-      image: mangaTai, 
+      images: [
+        mangaTai1, 
+        mangaTai, 
+        mangaTai2 ,
+        mangaTai3,
+        mangaTai4,
+        mangaTai5
+      ], 
       longDescription: 'MangaTai is a high-performance manga reader platform complete with an advanced ecosystem. It features a dedicated User Panel for tracking reading history, bookmarks, and account details alongside a powerful Admin Panel managing file uploads, categories, payment verification paths, and access permissions.',
     },
     {
@@ -28,13 +42,35 @@ const Projects = () => {
       description: 'An immersive digital marketplace designed for guitar enthusiasts, offering custom equipment selections with streamlined admin inventories.',
       stars: 5,
       tags: ['Spring', 'Bootstrap', 'Mysql', 'Admin User Control'],
-      image: 'https://via.placeholder.com/600x400/130b14/a855f7?text=Guitar+Hub+Preview', 
+      images: [
+        guitarHub, 
+       
+      ], 
       longDescription: 'Guitar Hub bridges premium music equipment sales with automated stock monitoring. The platform segments into dual operational interfaces: an intuitive store experience for customers exploring catalogs, and a secure Admin Dashboard engineered to manage incoming product lists and check transaction histories.',
     }
   ];
 
+  const handleOpenModal = (project) => {
+    setActiveProject(project);
+    setCurrentImgIndex(0);
+  };
+
+  const handlePrevImage = () => {
+    if (!activeProject) return;
+    setCurrentImgIndex((prev) => 
+      prev === 0 ? activeProject.images.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    if (!activeProject) return;
+    setCurrentImgIndex((prev) => 
+      prev === activeProject.images.length - 1 ? 0 : prev + 1
+    );
+  };
+
   return (
-    <section id="projects" className=" text-white flex flex-col items-center justify-start px-6 md:px-12 py-20 relative min-h-screen overflow-hidden">
+    <section id="projects" className="text-white flex flex-col items-center justify-start px-6 md:px-12 py-20 relative min-h-screen overflow-hidden">
       
       {/* Background Accent */}
       <div className="absolute inset-0 bg-[radial-gradient(#cca43b_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.02] pointer-events-none"></div>
@@ -117,7 +153,7 @@ const Projects = () => {
               {/* View Project Button */}
               <div>
                 <button
-                  onClick={() => setActiveProject(project)}
+                  onClick={() => handleOpenModal(project)}
                   className="w-fit inline-flex items-center justify-center py-2.5 px-5 rounded-md border border-[#cca43b]/30 text-[#cca43b] bg-[#cca43b]/5 hover:bg-[#cca43b]/10 text-xs md:text-sm font-serif tracking-wider transition-all duration-200"
                 >
                   View Project →
@@ -130,43 +166,78 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* --- SIDE-BY-SIDE NO-SCROLL MODAL --- */}
+      {/* --- STACKED FULL-WIDTH MODAL --- */}
       {activeProject && (
         <div 
-          // FIX: Changed items-center to items-start + pt-24 to dynamically keep it safely separated from the fixed header layer on small viewports
-          className="fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 pt-24 bg-black/80 backdrop-blur-sm overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-12 md:pt-20 bg-black/85 backdrop-blur-sm overflow-y-auto"
           onClick={() => setActiveProject(null)}
         >
-          {/* Main Modal Card Container */}
+          {/* Main Modal Container: Set to a max width of 3xl, vertical flex layout */}
           <div 
-            className="relative bg-[#130b14] border border-[#cca43b]/30 w-full max-w-4xl rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden grid grid-cols-1 md:grid-cols-2"
+            className="relative bg-[#130b14] border border-[#cca43b]/30 w-full max-w-3xl rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden flex flex-col my-8"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button Cross */}
+            {/* Close Button Cross (Enhanced contrast with z-index positioning) */}
             <button 
               onClick={() => setActiveProject(null)}
-              className="absolute top-4 right-4 z-20 text-gray-400 hover:text-[#cca43b] text-xl transition-colors duration-200 bg-black/40 p-1.5 rounded-full backdrop-blur-sm"
+              className="absolute top-4 right-4 z-40 text-gray-400 hover:text-[#cca43b] text-xl transition-colors duration-200 bg-black/60 p-2 rounded-full backdrop-blur-sm border border-white/10"
             >
               ✕
             </button>
 
-            {/* Left Side: Image Panel */}
-            <div className="relative w-full h-full min-h-[200px] md:min-h-[400px] bg-neutral-900 flex items-center justify-center border-b md:border-b-0 md:border-r border-[#cca43b]/20">
+            {/* Top Section: Full Width Image Slider */}
+            <div className="relative w-full aspect-[16/10] md:aspect-[16/9] bg-neutral-950 flex items-center justify-center border-b border-[#cca43b]/20 group/slider">
               <img 
-                src={activeProject.image} 
-                alt={`${activeProject.title} Preview`}
-                className="w-full h-full object-cover absolute inset-0"
+                src={activeProject.images[currentImgIndex]} 
+                alt={`${activeProject.title} View ${currentImgIndex + 1}`}
+                className="w-full h-full object-contain absolute inset-0"
               />
-              {/* Sleek shadow masking for a unified look */}
-              <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-l from-[#130b14]/80 via-transparent to-transparent pointer-events-none"></div>
+              
+              {/* Subtle bottom shadow mask to transition into text container safely */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#130b14]/40 via-transparent to-transparent pointer-events-none"></div>
+
+              {/* Slider Controls */}
+              {activeProject.images.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-black/70 text-[#cca43b] hover:bg-[#cca43b] hover:text-black w-10 h-10 rounded-full flex items-center justify-center border border-[#cca43b]/30 transition-all text-base font-bold shadow-md"
+                    title="Previous Image"
+                  >
+                    ←
+                  </button>
+                  <button
+                    onClick={handleNextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-black/70 text-[#cca43b] hover:bg-[#cca43b] hover:text-black w-10 h-10 rounded-full flex items-center justify-center border border-[#cca43b]/30 transition-all text-base font-bold shadow-md"
+                    title="Next Image"
+                  >
+                    →
+                  </button>
+
+                  {/* Diamond Navigation Indicators */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex space-x-2 bg-black/60 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/5">
+                    {activeProject.images.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setCurrentImgIndex(idx)}
+                        className={`w-2 h-2 rotate-45 transition-all ${
+                          idx === currentImgIndex 
+                            ? 'bg-[#cca43b] scale-120 shadow-[0_0_8px_#cca43b]' 
+                            : 'bg-gray-600 hover:bg-gray-400'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
 
-            {/* Right Side: Detailed Details Panel (No scroll needed) */}
-            <div className="p-6 md:p-8 flex flex-col justify-between space-y-4 bg-[#110912]">
+            {/* Bottom Section: Text Information Content */}
+            <div className="p-6 md:p-8 flex flex-col space-y-5 bg-[#110912]">
               <div>
-                {/* Meta Badge Tags */}
+                {/* Meta Badge Tags Layout */}
                 <div className="flex items-center gap-3 mb-2">
-                  <span className={`text-[10px] font-mono tracking-widest px-2 py-0.5 border rounded bg-black/40 ${activeProject.rarityColor}`}>
+                  <span className={`text-[10px] font-mono tracking-widest px-2.5 py-0.5 border rounded bg-black/40 ${activeProject.rarityColor}`}>
                     {activeProject.rarity}
                   </span>
                   <span className="text-[#a855f7] font-mono text-xs tracking-widest uppercase">
@@ -174,21 +245,21 @@ const Projects = () => {
                   </span>
                 </div>
 
-                {/* Title */}
-                <h3 className="font-serif text-3xl text-[#cca43b] font-bold uppercase tracking-wide mb-3">
+                {/* Project Title Heading */}
+                <h3 className="font-serif text-3xl md:text-4xl text-[#cca43b] font-bold uppercase tracking-wide mb-3">
                   {activeProject.title}
                 </h3>
 
-                <div className="w-full h-[1px] bg-gradient-to-r from-[#cca43b]/30 to-transparent mb-4"></div>
+                <div className="w-full h-[1px] bg-gradient-to-r from-[#cca43b]/30 via-[#cca43b]/10 to-transparent mb-4"></div>
 
-                {/* Project Narrative Text Description */}
+                {/* Long Description Text Block */}
                 <p className="text-gray-300 font-sans text-sm md:text-base leading-relaxed mb-6">
                   {activeProject.longDescription}
                 </p>
 
-                {/* Technical System Environment Parameters */}
-                <div>
-                  <h4 className="text-xs font-serif tracking-widest text-[#cca43b] uppercase mb-2">Attributes / Stack:</h4>
+                {/* Technical Stack Items */}
+                <div className="space-y-2">
+                  <h4 className="text-xs font-serif tracking-widest text-[#cca43b] uppercase">Attributes / Stack:</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {activeProject.tags.map((tag) => (
                       <span 
@@ -202,7 +273,7 @@ const Projects = () => {
                 </div>
               </div>
 
-              {/* Action Box Frame Buttons */}
+              {/* Action Buttons Row */}
               <div className="pt-4 border-t border-[#cca43b]/10 flex justify-end">
                 <button
                   onClick={() => setActiveProject(null)}
