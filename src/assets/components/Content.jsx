@@ -1,6 +1,7 @@
 import React from 'react';
 import gtoImage from '../gto.jpg'; // Ensure this path is correct based on your project structure
 import ppaImage from '../ppa.jpeg';
+
 const Content = () => {
     return (
         <section className=" min-h-screen  text-white flex items-center justify-center px-6  relative overflow-hidden" id="content">
@@ -11,20 +12,17 @@ const Content = () => {
             {/* Main Flex/Grid Container: Stacks on mobile, splits side-by-side on desktop */}
             <div className="max-w-5xl w-full flex flex-col md:flex-row items-center justify-center gap-12 md:gap-16 z-10">
 
-                {/* LEFT SIDE: Large Profile Avatar Frame */}
+                {/* LEFT SIDE: Profile Avatar Frame (Light and Glow Effects Removed) */}
                 <div className="flex-shrink-0">
-                    <div className="relative group">
-                        {/* External Glow Ring */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#cca43b] to-[#6d521d] opacity-40 blur-md group-hover:opacity-60 transition-opacity duration-300"></div>
-
+                    <div className="relative">
                         {/* Main Ring Container */}
-                        <div className="relative w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full p-[3px] bg-gradient-to-b from-[#cca43b] via-[#91712a] to-[#3a2c0a] shadow-[0_0_25px_rgba(204,164,59,0.25)]">
+                        <div className="w-56 h-56 md:w-64 md:h-64 lg:w-72 lg:h-72 rounded-full p-[3px] bg-gradient-to-b from-[#cca43b] via-[#91712a] to-[#3a2c0a]">
                             {/* Inner Dark Rim */}
                             <div className="w-full h-full rounded-full p-[2px] bg-[#0d070e]">
                                 {/* Image */}
                                 <img
                                     src={ppaImage}
-                                    alt="Arcturus Devlin Profile"
+                                    alt="Pyae Phyo Aung Profile"
                                     className="w-full h-full object-cover rounded-full filter contrast-[1.05] brightness-[0.95]"
                                 />
                             </div>
@@ -62,7 +60,7 @@ const Content = () => {
 
                     {/* Description Paragraph */}
                     <p className="text-gray-400 font-sans text-sm md:text-base leading-relaxed border-l-2 border-[#cca43b]/30 pl-4 py-1 italic">
-                        Passionate about crafting clean, scalable architectures and creating immersive digital environments.
+                        Passionated about crafting clean, scalable architectures and creating immersive digital environments.
                     </p>
 
                 </div>
